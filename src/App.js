@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css"
+import {useEffect, useState} from "react";
+import Movie from "./components/Movie";
+
+// const movieApi = 'https://imdb-api.com/en/API/SearchMovie/k_fm1t0alf/inception 2010'
+const movieApi = ''
+// const movieTop = 'https://imdb-api.com/en/API/Top250Movies/k_fm1t0alf'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const movies = [1, 2, 3]
+	const [movie, setMovie] = useState([])
+	// const [term, setTerm] = useState('')
+
+	const onHandleTerm = (e) => {
+		setTerm(e.target.value)
+	}
+
+	useEffect(() => {
+		fetch(movieApi)
+			.then(res => res.json())
+			.then(res => setMovie(res.result))
+	}, [])
+
+	const onHandleSearch = () => {
+		fetch(movieApi)
+			.then(res => res.json())
+			.then(res => setMovie(res.results))
+	}
+
+	return (
+		<>
+			<header>
+				<input type="text" placeholder="Найти..." value={term} onChange={onHandleSearch}/>
+			</header>
+
+			<div className="movies">
+				{movie.map((elem, i) => <Movie key={i}/>)}
+			</div>
+		</>
+	);
 }
 
 export default App;
